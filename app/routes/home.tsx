@@ -1,10 +1,12 @@
 // The home page: what oojam is, and the changelog of everything the community has built.
 // New features may add links or sections here, but the changelog must stay.
 import type { Route } from "./+types/home";
+import { NextBuild } from "~/components/next-build";
 import { loadBuilds, type BuildEntry } from "~/lib/builds";
 
 const PLATFORM_URL = "https://build.oojam.dev";
 const REPO_URL = "https://github.com/oojam-dev/oojam";
+const SPONSOR_URL = "https://github.com/sponsors/oojam-dev";
 
 export function meta(): Route.MetaDescriptors {
   return [
@@ -17,7 +19,7 @@ export function meta(): Route.MetaDescriptors {
 }
 
 export function loader() {
-  return { builds: loadBuilds() };
+  return { builds: loadBuilds(), serverNow: Date.now() };
 }
 
 const dayFormat = new Intl.DateTimeFormat("en-US", {
@@ -37,7 +39,7 @@ function prLabel(prUrl: string): string {
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
-  const { builds } = loaderData;
+  const { builds, serverNow } = loaderData;
 
   return (
     <div className="relative isolate overflow-hidden">
@@ -64,6 +66,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               Propose or vote on the next idea <span aria-hidden="true">→</span>
             </a>
           </p>
+          <NextBuild serverNow={serverNow} />
         </header>
 
         <section aria-labelledby="changelog" className="mt-20">
@@ -78,6 +81,9 @@ export default function Home({ loaderData }: Route.ComponentProps) {
         <p>
           Built in public by the community and Claude. Open source under the MIT licence at{" "}
           <a href={REPO_URL}>github.com/oojam-dev/oojam</a>.
+        </p>
+        <p className="mt-2">
+          oojam runs on donated credits. <a href={SPONSOR_URL}>Sponsor a build</a>; it pays for Claude, never for votes.
         </p>
       </footer>
     </div>
