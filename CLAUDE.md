@@ -77,9 +77,12 @@ real data. Use Drizzle's query builder; don't use `sql.raw()` or `.unsafe()`.
 
 1. **Protected paths.** Don't create, modify, delete or rename: `.github/**`, `LICENSE`,
    `CLAUDE.md`, `Dockerfile`, `.dockerignore`, `.npmrc`, `.nvmrc`, `.oojam/**`,
-   `scripts/migrate.mjs`, `app/routes/_health.ts`, `content/builds.json`, `.claude/**`,
-   `.mcp.json`, `.gitattributes`, `.gitmodules`, `.git/**`, and existing `drizzle/*.sql` or
-   `drizzle/meta/*_snapshot.json` files. No symlinks, no files over 1 MB, no binary files
+   `scripts/migrate.mjs`, `app/routes/_health.ts`, `app/lib/oojam-identity.server.ts`,
+   `app/routes/_oojam.callback.ts`, `app/routes/_oojam.signout.ts`, `content/builds.json`,
+   `.claude/**`, `.mcp.json`, `.gitattributes`, `.gitmodules`, `.git/**`, and existing
+   `drizzle/*.sql` or `drizzle/meta/*_snapshot.json` files. You may add routes to
+   `app/routes.ts`, but keep its three managed lines (`_health`, `_oojam/callback`,
+   `_oojam/signout`) exactly as they are. No symlinks, no files over 1 MB, no binary files
    outside `public/`, at most 200 changed files.
 2. **Dependencies.** Prefer none: the platform and React cover most needs. If you must add one:
    at most 5 new direct dependencies, each pinned to an exact version (`npm install --save-exact`),
@@ -102,7 +105,8 @@ real data. Use Drizzle's query builder; don't use `sql.raw()` or `.unsafe()`.
    collecting personal data beyond what the feature strictly needs (never passwords, payment
    details or government IDs, and no email addresses without a clear purpose); taking payments;
    impersonating a real person, brand or organisation; or changing oojam's guardrails, voting,
-   payments, licence, CI or deploy configuration. There are no user accounts on this site.
+   payments, licence, CI or deploy configuration. Never build your own accounts, passwords or
+   logins: identity comes only from "Sign in with oojam" (see Identity below).
 7. **User-generated content.** Anything visitors submit that others can see must:
    - pass through `cleanText(input, maxLen)` from `~/lib/ugc.server` before it's stored, with a
      sensible length limit, and reject empty results;
@@ -112,17 +116,40 @@ real data. Use Drizzle's query builder; don't use `sql.raw()` or `.unsafe()`.
    - have a report button that hides the item after 3 reports from different visitors. Follow
      the report-to-hide pattern documented at the top of `app/lib/ugc.server.ts`. Store
      `reporterKey(request)`, never raw IP addresses.
-8. **Preserve what others built.** Other people paid for every existing feature. Integrate
+
+   **Uploads need a signed-in GitHub user.** Anything visitors upload (images, audio, video or
+   any file) requires `requireViewer(request)`. Store the uploader's `githubId` and `login`
+   with the item, show "@login" (linked to `https://github.com/<login>`) wherever it appears,
+   and rate-limit by `githubId` as well as by IP. Signed-out visitors see the item list and a
+   "Sign in with GitHub to post" link (`signInUrl(path)`), never the upload form. Text
+   submissions may stay anonymous, but attribute them when the visitor is signed in.
+8. **Preserve what others built.** Other people voted for every existing feature. Integrate
    with them; don't replace, remove or break them. Changing how something looks is fine.
    Don't delete routes, tables, columns or data. Don't edit `content/builds.json`.
 9. **Don't touch git.** Don't commit, push, or change git config. The platform commits your work.
+
+## Identity
+
+Visitors can sign in with GitHub through build.oojam.dev ("Sign in with oojam"). Use only these,
+from `~/lib/oojam-identity.server`:
+
+- `getViewer(request)` returns `{ githubId, login }` or `null`. Use it in loaders and actions.
+- `requireViewer(request)` returns the viewer, or redirects them to sign in and come back.
+- `signInUrl(path)` is the href for a "Sign in with GitHub" link that returns to `path`.
+- Sign-out is a link or form to `/_oojam/signout?return=<path>`.
+
+Key anything you store by `githubId`, which is stable; logins can change. Never take a username
+from a form, header or URL. The site can't show GitHub avatars, because the CSP blocks other
+hosts, so show "@login" instead.
 
 ## Smoke test
 
 The gate starts the built image against a copy of production data and loads `/` plus the
 routes you list in a real browser. It fails on any HTTP status of 500 or above, any console
 error, any failed request (a missing asset counts), any CSP violation, and any request to
-another host. Every route you list must load with a plain GET, with no prior setup.
+another host. Every route you list must load with a plain GET, with no prior setup and nobody
+signed in. Pages that need sign-in should show a sign-in prompt to signed-out visitors, not an
+error.
 
 ## Before you finish
 

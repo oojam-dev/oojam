@@ -27,6 +27,7 @@ describe("parseBuilds", () => {
   });
 
   it("orders same-day entries by idea id, highest first", () => {
+    expect(parseBuilds([entry({ ideaId: null, author: "oojam-dev" })])[0]!.ideaId).toBeNull();
     const builds = parseBuilds([entry({ ideaId: 4 }), entry({ ideaId: 9 })]);
     expect(builds.map((b) => b.ideaId)).toEqual([9, 4]);
   });
@@ -44,6 +45,7 @@ describe("parseBuilds", () => {
     ["day", { day: "15/10/2026" }],
     ["day", { day: "2026-13-45" }],
     ["ideaId", { ideaId: 0 }],
+    ["ideaId", { ideaId: undefined as unknown as number }],
     ["ideaId", { ideaId: "7" as unknown as number }],
     ["title", { title: "  " }],
     ["author", { author: "not a login" }],

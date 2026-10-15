@@ -5,6 +5,8 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 // and link to them from the home page so visitors can find them.
 export default [
   index("routes/home.tsx"),
-  // Health check for the deployer and CI. Keep it.
+  // Managed by oojam (the guardrails require these three lines). Keep them.
   route("_health", "routes/_health.ts"),
+  route("_oojam/callback", "routes/_oojam.callback.ts"),
+  route("_oojam/signout", "routes/_oojam.signout.ts"),
 ] satisfies RouteConfig;

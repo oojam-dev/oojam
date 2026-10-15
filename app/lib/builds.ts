@@ -11,7 +11,8 @@ export type BuildEntry = {
   /** UTC day of the build, `YYYY-MM-DD`. */
   day: string;
   /** The idea's id on build.oojam.dev. */
-  ideaId: number;
+  /** The idea that was built, or null on a housekeeping day (no idea on the board). */
+  ideaId: number | null;
   title: string;
   /** GitHub login of the idea's author. */
   author: string;
@@ -45,8 +46,8 @@ export function parseBuilds(data: unknown): BuildEntry[] {
     if (!DAY.test(day) || Number.isNaN(Date.parse(`${day}T00:00:00Z`))) fail(index, `"day" must be YYYY-MM-DD`);
 
     const ideaId = entry.ideaId;
-    if (typeof ideaId !== "number" || !Number.isSafeInteger(ideaId) || ideaId < 1) {
-      fail(index, `"ideaId" must be a positive integer`);
+    if (ideaId !== null && (typeof ideaId !== "number" || !Number.isSafeInteger(ideaId) || ideaId < 1)) {
+      fail(index, `"ideaId" must be a positive integer, or null for housekeeping`);
     }
 
     const author = requireString(entry, "author", index);
@@ -71,7 +72,7 @@ export function parseBuilds(data: unknown): BuildEntry[] {
     };
   });
 
-  return entries.sort((a, b) => (a.day === b.day ? b.ideaId - a.ideaId : a.day < b.day ? 1 : -1));
+  return entries.sort((a, b) => (a.day === b.day ? (b.ideaId ?? 0) - (a.ideaId ?? 0) : a.day < b.day ? 1 : -1));
 }
 
 /** All builds, newest first. */

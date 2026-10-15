@@ -116,7 +116,13 @@ function Changelog({ builds }: { builds: BuildEntry[] }) {
           <h3 className="mt-1 text-lg leading-snug font-semibold text-balance">{build.title}</h3>
           <p className="mt-1 leading-relaxed text-pretty">{build.summary}</p>
           <p className="mt-2 text-sm text-muted">
-            Idea by <a href={`https://github.com/${build.author}`}>@{build.author}</a>
+            {build.ideaId === null ? (
+              "Housekeeping: no idea that day"
+            ) : (
+              <>
+                Idea by <a href={`https://github.com/${build.author}`}>@{build.author}</a>
+              </>
+            )}
             <span aria-hidden="true"> · </span>
             <a href={build.prUrl}>{prLabel(build.prUrl)}</a>
           </p>
