@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, test, build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+
+  migrate-and-serve:
+    name: Migrate and serve
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: oojam
+          POSTGRES_PASSWORD: oojam
+          POSTGRES_DB: site
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U oojam -d site"
+          --health-interval 2s
+          --health-timeout 5s
+          --health-retries 30
+    env:
+      DATABASE_URL: postgres://oojam:oojam@localhost:5432/site
+      GIT_SHA: ${{ github.sha }}
+      PORT: "3000"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - name: Apply migrations
+        run: npm run db:migrate
+      - name: Migrations are idempotent
+        run: npm run db:migrate
+      - name: Start the site and check it
+        run: |
+          NODE_ENV=production npm start > server.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:3000/_health > health.json && break
+            sleep 1
+          done
+          cat health.json || { cat server.log; exit 1; }
+          node -e '
+            const h = JSON.parse(require("fs").readFileSync("health.json", "utf8"));
+            if (h.ok !== true || h.sha !== process.env.GIT_SHA) { console.error("bad health", h); process.exit(1); }
+          '
+          curl -sf -o /dev/null http://localhost:3000/ || { cat server.log; exit 1; }
+          echo "ok"
