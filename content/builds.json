@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "day": "2026-10-16",
+    "ideaId": 2,
+    "title": "A graffiti wall people can collective draw on.",
+    "author": "tholder",
+    "prUrl": "https://github.com/oojam-dev/oojam/pull/1",
+    "summary": "The graffiti wall is built at **/wall**, and `npm run check`, `npm test` (69 tests) and `npm run build` all pass. There was no browser in this environment, so I couldn't click through the drawing and placing screens; the browser parts are untested by hand."
+  }
+]
