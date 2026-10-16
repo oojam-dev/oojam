@@ -69,6 +69,20 @@ export default function Home({ loaderData }: Route.ComponentProps) {
           <NextBuild serverNow={serverNow} />
         </header>
 
+        <section aria-labelledby="explore" className="mt-20">
+          <h2 id="explore" className="font-mono text-xs tracking-widest text-muted uppercase">
+            Explore
+          </h2>
+          <ul className="mt-6 space-y-3">
+            <li>
+              <a href="/wall" className="text-lg font-semibold">
+                Graffiti wall
+              </a>
+              <span className="text-muted"> · grab a spray can and leave your mark for everyone to see.</span>
+            </li>
+          </ul>
+        </section>
+
         <section aria-labelledby="changelog" className="mt-20">
           <h2 id="changelog" className="font-mono text-xs tracking-widest text-muted uppercase">
             Changelog
