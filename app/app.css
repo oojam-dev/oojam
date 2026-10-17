@@ -81,3 +81,30 @@
     animation: none;
   }
 }
+
+/* Candle flames on the shrine of Captain Holder (/shrine). */
+@keyframes shrine-flicker {
+  0%,
+  100% {
+    transform: scale(1, 1) rotate(0deg);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(0.92, 1.08) rotate(-3deg);
+    opacity: 0.9;
+  }
+  60% {
+    transform: scale(1.05, 0.94) rotate(2deg);
+    opacity: 1;
+  }
+}
+
+@utility shrine-flicker {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: shrine-flicker 1.6s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}

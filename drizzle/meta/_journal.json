@@ -15,6 +15,13 @@
       "when": 1792108946864,
       "tag": "0001_graffiti_wall",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792195307677,
+      "tag": "0002_shrine",
+      "breakpoints": true
     }
   ]
 }
