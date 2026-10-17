@@ -7,6 +7,7 @@ export default [
   index("routes/home.tsx"),
   route("wall", "routes/wall.tsx"),
   route("wall/piece/:id", "routes/wall.piece.ts"),
+  route("shrine", "routes/shrine.tsx"),
   // Managed by oojam (the guardrails require these three lines). Keep them.
   route("_health", "routes/_health.ts"),
   route("_oojam/callback", "routes/_oojam.callback.ts"),

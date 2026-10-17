@@ -20,7 +20,7 @@
  *
  * New columns on existing tables must be nullable or have a default.
  */
-import { bigint, bigserial, integer, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { bigint, bigserial, index, integer, jsonb, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 /** Small key/value settings for the site itself. */
 export const siteMeta = pgTable("site_meta", {
@@ -56,4 +56,21 @@ export const graffitiReports = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (t) => [unique("graffiti_reports_piece_reporter_key").on(t.pieceId, t.reporter)],
+);
+
+/**
+ * The shrine of Captain Holder (/shrine): one row each time a pilgrim says their three Hail
+ * Marys and leaves an offering. `offering` is an id from OFFERINGS in app/lib/shrine.ts, never
+ * free text. Signed-in pilgrims are named in the parish register; anonymous ones aren't.
+ */
+export const shrineRespects = pgTable(
+  "shrine_respects",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    offering: text("offering").notNull(),
+    githubId: bigint("github_id", { mode: "number" }),
+    login: text("login"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => [index("shrine_respects_created_at_idx").on(t.createdAt)],
 );

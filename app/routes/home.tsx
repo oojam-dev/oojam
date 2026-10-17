@@ -80,6 +80,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </a>
               <span className="text-muted"> · grab a spray can and leave your mark for everyone to see.</span>
             </li>
+            <li>
+              <a href="/shrine" className="text-lg font-semibold">
+                The shrine of Captain Holder
+              </a>
+              <span className="text-muted"> · say three Hail Marys and pledge your allegiance. Careful now.</span>
+            </li>
           </ul>
         </section>
 
