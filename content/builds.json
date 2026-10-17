@@ -6,5 +6,13 @@
     "author": "tholder",
     "prUrl": "https://github.com/oojam-dev/oojam/pull/1",
     "summary": "The graffiti wall is built at **/wall**, and `npm run check`, `npm test` (69 tests) and `npm run build` all pass. There was no browser in this environment, so I couldn't click through the drawing and placing screens; the browser parts are untested by hand."
+  },
+  {
+    "day": "2026-10-17",
+    "ideaId": 4,
+    "title": "A shrine that dedicates our allegiance to Captain Holder.",
+    "author": "mattsmithies",
+    "prUrl": "https://github.com/oojam-dev/oojam/pull/2",
+    "summary": "I built the shrine of Captain Holder at **/shrine** and linked it from the home page, above the changelog. `npm run check`, `npm test` (79 tests) and `npm run build` all pass. There was no database or browser here, so I couldn't test the live page. Instead I did a one-off server "
   }
 ]
