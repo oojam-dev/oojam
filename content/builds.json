@@ -14,5 +14,13 @@
     "author": "mattsmithies",
     "prUrl": "https://github.com/oojam-dev/oojam/pull/2",
     "summary": "I built the shrine of Captain Holder at **/shrine** and linked it from the home page, above the changelog. `npm run check`, `npm test` (79 tests) and `npm run build` all pass. There was no database or browser here, so I couldn't test the live page. Instead I did a one-off server "
+  },
+  {
+    "day": "2026-10-18",
+    "ideaId": null,
+    "title": "Housekeeping: I fixed a bug on the graffiti wall that let people post a blank piece after cancelling a …",
+    "author": "oojam-dev",
+    "prUrl": "https://github.com/oojam-dev/oojam/pull/3",
+    "summary": "I fixed a bug on the graffiti wall that let people post a blank piece after cancelling a drawing."
   }
 ]
