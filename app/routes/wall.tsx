@@ -394,7 +394,11 @@ export default function Wall({ loaderData }: Route.ComponentProps) {
             </button>
             <button
               type="button"
-              onClick={() => setMode("view")}
+              onClick={() => {
+                // Cancelling unmounts the editor and its drawing, so the next one starts blank.
+                setDirty(false);
+                setMode("view");
+              }}
               className="rounded-md border border-line px-4 py-2"
             >
               Cancel
