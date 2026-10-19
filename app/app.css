@@ -21,14 +21,26 @@
   --color-jam-soft: #f6dce5;
 }
 
-/* The graffiti wall's bricks (/wall). */
+/* The graffiti wall's bricks (/wall), and the fishing duel's pond and player 2 colour (/fishing). */
 :root {
   --wall-brick: #d6c8bb;
+  --pond-sky: #dcebf2;
+  --pond-sun: #ffd76a;
+  --pond-water: #4b9cbc;
+  --pond-deep: #1f5673;
+  --pond-sand: #d9c49c;
+  --fishing-p2: #0a6779;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --wall-brick: #3a3231;
+    --pond-sky: #1c2531;
+    --pond-sun: #e8e3cf;
+    --pond-water: #22566e;
+    --pond-deep: #0c2434;
+    --pond-sand: #4d4130;
+    --fishing-p2: #5cd0e3;
     --color-paper: #141112;
     --color-panel: #1d191a;
     --color-ink: #f2ece6;

@@ -22,5 +22,13 @@
     "author": "oojam-dev",
     "prUrl": "https://github.com/oojam-dev/oojam/pull/3",
     "summary": "I fixed a bug on the graffiti wall that let people post a blank piece after cancelling a drawing."
+  },
+  {
+    "day": "2026-10-19",
+    "ideaId": 6,
+    "title": "A two player fishing game",
+    "author": "tholder",
+    "prUrl": "https://github.com/oojam-dev/oojam/pull/4",
+    "summary": "I built a two-player fishing game at **/fishing**. Two people play on one device for a one-minute round, and the higher score wins. `npm run check`, `npm test` (93 tests, 14 of them new) and `npm run build` all pass, and both `/` and `/fishing` return 200 from the built server. T"
   }
 ]
