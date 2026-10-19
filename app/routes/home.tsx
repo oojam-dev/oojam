@@ -86,6 +86,12 @@ export default function Home({ loaderData }: Route.ComponentProps) {
               </a>
               <span className="text-muted"> · say three Hail Marys and pledge your allegiance. Careful now.</span>
             </li>
+            <li>
+              <a href="/fishing" className="text-lg font-semibold">
+                Fishing duel
+              </a>
+              <span className="text-muted"> · two players, one pond, one minute. Cast, reel, and mind the jellyfish.</span>
+            </li>
           </ul>
         </section>
 
