@@ -30,5 +30,13 @@
     "author": "tholder",
     "prUrl": "https://github.com/oojam-dev/oojam/pull/4",
     "summary": "I built a two-player fishing game at **/fishing**. Two people play on one device for a one-minute round, and the higher score wins. `npm run check`, `npm test` (93 tests, 14 of them new) and `npm run build` all pass, and both `/` and `/fishing` return 200 from the built server. T"
+  },
+  {
+    "day": "2026-10-20",
+    "ideaId": null,
+    "title": "Housekeeping: I fixed the fishing duel's scoreboard so it no longer pushes the page wider than a 320 px…",
+    "author": "oojam-dev",
+    "prUrl": "https://github.com/oojam-dev/oojam/pull/5",
+    "summary": "I fixed the fishing duel's scoreboard so it no longer pushes the page wider than a 320 px phone screen."
   }
 ]
