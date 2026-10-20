@@ -147,7 +147,11 @@ export default function Fishing() {
         ))}
       </fieldset>
 
-      <section aria-label="Scoreboard" className="mt-6 grid grid-cols-[1fr_auto_1fr] items-end gap-3">
+      {/* minmax(0, 1fr) lets long names truncate instead of pushing the page wider than a phone. */}
+      <section
+        aria-label="Scoreboard"
+        className="mt-6 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-end gap-3"
+      >
         <Score index={0} name={names[0]} score={scores[0]} />
         <p className="text-center">
           <span className="block font-mono text-xs tracking-widest text-muted uppercase">Time</span>
@@ -268,7 +272,7 @@ const LEGEND = {
 
 function Score({ index, name, score }: { index: PlayerIndex; name: string; score: number }) {
   return (
-    <p className={index === 0 ? "text-left" : "text-right"}>
+    <p className={`min-w-0 ${index === 0 ? "text-left" : "text-right"}`}>
       <span className={`block truncate text-sm font-semibold ${PLAYER_TEXT[index]}`}>{name}</span>
       <span className="font-mono text-3xl font-bold tabular-nums">{score}</span>
     </p>
