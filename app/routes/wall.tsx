@@ -201,6 +201,10 @@ export default function Wall({ loaderData }: Route.ComponentProps) {
   const wallRef = useRef<HTMLDivElement>(null);
   const placeBarRef = useRef<HTMLElement>(null);
   const ghostRef = useRef<HTMLButtonElement>(null);
+  const sprayButtonRef = useRef<HTMLButtonElement>(null);
+  const paintHeadingRef = useRef<HTMLHeadingElement>(null);
+  const placeHeadingRef = useRef<HTMLHeadingElement>(null);
+  const focusedMode = useRef<Mode>(mode);
   const drag = useRef<{ x: number; y: number; left: number; top: number; moved: boolean } | null>(null);
   const suppressClick = useRef(false);
 
@@ -231,6 +235,15 @@ export default function Wall({ loaderData }: Route.ComponentProps) {
     const timer = setTimeout(() => setHighlight(null), 4000);
     return () => clearTimeout(timer);
   }, [highlight, pieces]);
+
+  // Each step hides the button that was just pressed, so hand focus to the new step rather than
+  // dropping keyboard and screen reader users back at the top of the page.
+  useEffect(() => {
+    if (focusedMode.current === mode) return;
+    focusedMode.current = mode;
+    const target = mode === "draw" ? paintHeadingRef : mode === "place" ? placeHeadingRef : sprayButtonRef;
+    target.current?.focus({ preventScroll: true });
+  }, [mode]);
 
   // Keep the placement rectangle on screen as it moves (arrow keys especially).
   useEffect(() => {
@@ -350,6 +363,7 @@ export default function Wall({ loaderData }: Route.ComponentProps) {
         ) : mode === "view" ? (
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <button
+              ref={sprayButtonRef}
               type="button"
               onClick={() => {
                 setError(null);
@@ -369,7 +383,7 @@ export default function Wall({ loaderData }: Route.ComponentProps) {
 
       {viewer && mode !== "view" && (
         <section aria-labelledby="paint-heading" hidden={mode !== "draw"} className="mt-6 max-w-xl">
-          <h2 id="paint-heading" className="text-xl font-bold">
+          <h2 ref={paintHeadingRef} id="paint-heading" tabIndex={-1} className="text-xl font-bold">
             1. Paint your piece
           </h2>
           <p className="mt-1 text-sm text-muted">
@@ -410,7 +424,7 @@ export default function Wall({ loaderData }: Route.ComponentProps) {
 
       {viewer && mode === "place" && (
         <section ref={placeBarRef} aria-labelledby="place-heading" className="mt-6 rounded-lg border border-line bg-panel p-4">
-          <h2 id="place-heading" className="text-xl font-bold">
+          <h2 ref={placeHeadingRef} id="place-heading" tabIndex={-1} className="text-xl font-bold">
             2. Put it on the wall
           </h2>
           <p className="mt-1 text-sm text-muted">
