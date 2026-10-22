@@ -1,7 +1,7 @@
 // The shrine of Captain Holder: pilgrims say three Hail Marys, leave an offering on the altar
 // and pledge their allegiance to the Captain. Each respect paid keeps a candle lit for a day.
 import { count, desc, gt } from "drizzle-orm";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { data, Form, useNavigation } from "react-router";
 
 import type { Route } from "./+types/shrine";
@@ -279,10 +279,18 @@ export default function Shrine({ loaderData, actionData }: Route.ComponentProps)
   );
 }
 
-function Blessing({ paid }: { paid: { offering: string; blessing: string } }) {
+function Blessing({ paid }: { paid: { id: number; offering: string; blessing: string } }) {
   const offering = findOffering(paid.offering);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Paying respects remounts the form and removes the focused button, so hand focus to the
+  // blessing rather than dropping keyboard and screen reader users back at the top of the page.
+  useEffect(() => {
+    ref.current?.focus();
+  }, [paid.id]);
+
   return (
-    <div role="status" className="mt-5 rounded-md border border-line bg-paper px-4 py-4">
+    <div ref={ref} tabIndex={-1} role="status" className="mt-5 rounded-md border border-line bg-paper px-4 py-4">
       <p className="text-lg font-semibold">
         <span aria-hidden="true">🙏 </span>Your respects have been paid.
       </p>
